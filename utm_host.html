@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>UTM Host</title>
+
+  <!-- Pixel -->
+  <script>
+    window.pixelId = "689db6df3ac68763d19d1be6";
+    (function(){
+      var a = document.createElement("script");
+      a.async = true; 
+      a.defer = true;
+      a.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+      document.head.appendChild(a);
+    })();
+  </script>
+
+  <!-- UTMify -->
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
+</head>
+<body>
+<script>
+  // Confirma para o parent que carregou
+  window.parent.postMessage({ type: "utm-ready" }, "*");
+</script>
+</body>
+</html>

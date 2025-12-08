@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body>
+<script>
+(function () {
+  // Vars vindas do Typebot — PRECISAM estar entre aspas
+  const name = "{{nome}}";
+  const cpf  = "{{cpf}}";
+
+  // preserva UTMs/params que já vierem na URL
+  const incoming = new URLSearchParams(window.location.search);
+
+  // aplica os campos para o checkout
+  if (name && name !== "{{nome}}") incoming.set("name", String(name).trim());
+  if (cpf  && cpf  !== "{{cpf}}")  incoming.set("document", String(cpf).replace(/\D/g,""));
+
+  // monta a URL final
+  const checkout = new URL("hhttps://pay.programa-descontao.com/n1NLgw25lPlGMxE");
+  incoming.forEach((v,k) => checkout.searchParams.set(k, v));
+
+  // redireciona
+  window.location.replace(checkout.toString());
+})();
+</script>
+
+<!-- fallback se JS estiver bloqueado -->
+<noscript>
+  <meta http-equiv="refresh" content="0;url=https://pay.programa-descontao.com/n1NLgw25lPlGMxE">
+</noscript>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Oficial • Entrar</title>
+
+<!-- PIXEL + UTM -->
+<script>
+  window.pixelId = "6904e9eda3f1cd7e9a0615d4";
+  var a = document.createElement("script");
+  a.setAttribute("async", "");
+  a.setAttribute("defer", "");
+  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+  document.head.appendChild(a);
+</script>
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+<!-- /PIXEL + UTM -->
+
+<style>
+  :root{
+    --rosa:#e6007e; --rosa-dark:#cc0070;
+    --ink:#0f172a; --muted:#667085; --line:#e6e9ef;
+    --logo-h:64px; --title-size:22px; --input-h:54px;
+    --radius:12px; --btn-radius:14px; --icon-size:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#fff;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
+  .wrap{width:100%;max-width:420px;padding:120px 20px 60px}
+  .brand{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:24px}
+  .brand img{height:var(--logo-h)}
+  .brand .title{margin-top:8px;font-size:var(--title-size);font-weight:600;color:#0f172a}
+  .field{position:relative;margin-bottom:20px}
+  .input{width:100%;height:var(--input-h);padding:0 14px;font-size:16px;border:1px solid var(--line);border-radius:var(--radius);outline:none;transition:border-color .15s,box-shadow .15s}
+  .input:focus{border-color:#cbd5e1;box-shadow:0 0 0 3px rgba(230,0,126,.08)}
+  .input.error{border-color:#e11d48;box-shadow:0 0 0 3px rgba(225,29,72,.15)}
+  .error-icon{position:absolute;top:50%;right:12px;width:var(--icon-size);height:var(--icon-size);transform:translateY(-50%);display:none}
+  .hint{font-size:13px;color:#e11d48;margin-top:4px;min-height:18px}
+  .switch-row{display:flex;align-items:center;gap:10px;margin:30px 0}
+  .switch{position:relative;width:46px;height:26px;border-radius:999px;background:#e6e7ec;cursor:pointer;flex:0 0 46px;transition:background .2s}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:999px;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:left .2s}
+  .switch.on{background:var(--rosa)} .switch.on::after{left:23px}
+  .switch-label{font-size:15px;color:#0f172a}
+  .btn{width:100%;border:0;border-radius:var(--btn-radius);padding:14px;font-weight:600;font-size:16px;cursor:not-allowed;background:#d9dbe2;color:#848b98;transition:filter .15s,transform .05s;margin:30px 0}
+  .btn.enabled{cursor:pointer;color:#fff;background:linear-gradient(90deg,#ff3e9e 0%, #e6007e 100%)}
+  .btn.enabled:active{transform:translateY(1px)}
+  .btn.loading{opacity:.9;font-style:italic}
+  .foot-links{margin:30px 0 10px;text-align:center;font-size:14px}
+  .foot-links b{color:var(--rosa)} .terms{margin-top:14px;text-align:center;font-size:13px;color:#525866}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <h1 class="title">Digite seu CPF</h1>
+    </div>
+
+    <div class="field">
+      <input id="cpf" class="input" type="tel" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" aria-label="CPF" />
+      <img id="errorIcon" class="error-icon" src="https://i.postimg.cc/x1z3NG6S/img-removebg-preview.png" alt="Erro">
+      <div id="cpfHint" class="hint"></div>
+    </div>
+
+    <div class="switch-row">
+      <div id="remember" class="switch" role="switch" aria-checked="false" tabindex="0"></div>
+      <div class="switch-label">Lembrar CPF para o próximo acesso</div>
+    </div>
+
+    <button id="continueBtn" class="btn" type="button" disabled>Continuar</button>
+
+    <div class="foot-links"><b>Veja aqui</b> soluções para a sua empresa.</div>
+    <div class="terms">Termos de Uso e Política de Privacidade</div>
+  </div>
+
+<script>
+(() => {
+  const NEXT_URL = "/chat/index.html";  // redireciona com ?cpf=
+  const $cpf = document.getElementById('cpf');
+  const $hint = document.getElementById('cpfHint');
+  const $btn = document.getElementById('continueBtn');
+  const $remember = document.getElementById('remember');
+  const $icon = document.getElementById('errorIcon');
+
+  function maskCPF(v){
+    return v.replace(/\D/g,'').slice(0,11)
+      .replace(/(\d{3})(\d)/,"$1.$2")
+      .replace(/(\d{3})(\d)/,"$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  }
+  function isValidCPF(cpfRaw){
+    const cpf = cpfRaw.replace(/\D/g,'');
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+    const dv=(b)=>{let s=0;for(let i=0;i<b.length;i++)s+=+b[i]*(b.length+1-i);const m=s%11;return(m<2)?0:11-m;}
+    const d1=dv(cpf.slice(0,9)), d2=dv(cpf.slice(0,9)+d1);
+    return cpf.endsWith(""+d1+d2);
+  }
+  function enableBtn(ok){
+    if(ok){$btn.classList.add('enabled');$btn.disabled=false;}
+    else{$btn.classList.remove('enabled');$btn.disabled=true;}
+  }
+
+  $cpf.addEventListener('input', (e)=>{
+    const masked=maskCPF(e.target.value); e.target.value=masked;
+    const ok=isValidCPF(masked); enableBtn(ok);
+    if(masked.replace(/\D/g,'').length<11){$hint.textContent="";$icon.style.display="none";$cpf.classList.remove("error");}
+    else if(ok){$hint.textContent="";$icon.style.display="none";$cpf.classList.remove("error");}
+    else{$hint.textContent="Digite um CPF válido";$icon.style.display="block";$cpf.classList.add("error");}
+  });
+
+  const LS_KEY_CPF="site.cpf",LS_KEY_REM="site.remember";
+  const savedRemember = localStorage.getItem(LS_KEY_REM) === "1";
+  if(savedRemember){
+    $remember.classList.add('on');$remember.setAttribute('aria-checked','true');
+    const savedCpf = localStorage.getItem(LS_KEY_CPF)||"";
+    if(savedCpf){$cpf.value=maskCPF(savedCpf);enableBtn(isValidCPF($cpf.value));}
+  }
+  function toggleRemember(){
+    const on=!$remember.classList.contains('on');
+    $remember.classList.toggle('on', on);
+    $remember.setAttribute('aria-checked', on ? 'true' : 'false');
+    localStorage.setItem(LS_KEY_REM, on ? "1" : "0");
+    if(!on){ localStorage.removeItem(LS_KEY_CPF); }
+  }
+  $remember.addEventListener('click', toggleRemember);
+  $remember.addEventListener('keydown', (e)=>{ if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleRemember();} });
+
+  $btn.addEventListener('click', ()=>{
+    if($btn.disabled) return;
+    const raw = $cpf.value.replace(/\D/g,'');
+    if(localStorage.getItem(LS_KEY_REM)==="1"){ localStorage.setItem(LS_KEY_CPF, raw); }
+
+    // altera texto do botão antes de redirecionar
+    $btn.textContent = "Redirecionando...";
+    $btn.classList.add("loading");
+    $btn.disabled = true;
+
+    setTimeout(()=>{
+      window.location.href = `${NEXT_URL}?cpf=${raw}`;
+    }, 1800); // 1,8s depois redireciona
+  });
+})();
+</script>
+</body>
+</html>

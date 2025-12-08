@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atendimento • Central</title>
+
+  <!-- Pixel (ok no main) -->
+  <script>
+    window.pixelId = "6904e9eda3f1cd7e9a0615d4";
+    (function(){
+      var a = document.createElement("script");
+      a.async = true; a.defer = true;
+      a.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+      document.head.appendChild(a);
+    })();
+  </script>
+
+  <style>
+    :root{ --ink:#0f172a; --muted:#667085; --line:#e6e9ef; --soft:#f9fafb; --rosa:#e6007e; --success:#22c55e; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff;color:var(--ink)}
+
+    /* Topbar */
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 20px;border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff 0%,#fafbff 100%);
+      position:sticky;top:0;z-index:10;box-shadow:0 8px 24px rgba(16,24,40,.06);
+    }
+    .left{display:flex;align-items:center;gap:12px}
+    .logo{height:42px;width:auto}
+    .stack{display:flex;flex-direction:column;line-height:1.1}
+    .hello{font-weight:800;font-size:22px;letter-spacing:.2px;min-height:1.2em}
+    .cpf{font-size:14px;color:var(--muted);margin-top:4px;min-height:1em}
+
+    /* Avatar inicial (letra) */
+    .user-icon{
+      height:44px;width:44px;min-width:44px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--rosa);color:#fff;font-weight:800;font-size:18px;letter-spacing:.2px;
+      box-shadow:0 2px 6px rgba(0,0,0,.06);user-select:none;
+    }
+
+    /* Seção "Dúvidas? fale conosco" */
+    .contact-box{ text-align:center; padding:24px 16px; border-bottom:1px solid var(--line); }
+    .contact-avatars{ display:flex;justify-content:center;margin-bottom:16px; }
+    .contact-avatars img{
+      width:70px;height:70px;border-radius:50%;object-fit:cover;
+      box-shadow:0 2px 8px rgba(0,0,0,.08); border:2px solid #fff; margin-left:-15px;
+    }
+    .contact-avatars img:first-child{margin-left:0}
+    .contact-title{ font-size:20px;font-weight:800;margin-bottom:8px;color:#111827 }
+    .contact-status{ display:flex;justify-content:center;align-items:center;gap:8px;font-size:15px;color:#111827 }
+    .contact-status .dot{ width:12px;height:12px;border-radius:50%;background:var(--success) }
+
+    /* Área do chat + overlay */
+    .chat-area{ position:relative; height:calc(100dvh - 260px); }
+    @media (min-width:768px){ .chat-area{ height:calc(100dvh - 240px);} }
+    #tbWrap, #tbWrap iframe{ width:100%; height:100%; border:0; }
+    @media (min-width:768px){ #tbWrap iframe{ border-radius:20px; } }
+
+    #chatLoading{
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      background:#fff; z-index:99;
+    }
+    .loading-box{ text-align:center; color:var(--ink); }
+    .spinner{
+      display:block; margin:0 auto 12px; width:28px; height:28px;
+      border:3px solid #e5e7eb; border-top-color:var(--rosa);
+      border-radius:50%; animation:spin 1s linear infinite;
+    }
+    .loading-text{ font-size:15px; font-weight:600; letter-spacing:.2px; }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    /* Mensagem alternativa no desktop (opcional) */
+    .desktop-note{
+      text-align:center; padding:24px; color:#111827; font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <!-- UTM isolado em background (SEM reiniciar o chat) -->
+  <iframe src="/utm_host.html" style="display:none;" aria-hidden="true" tabindex="-1"></iframe>
+
+  <div class="topbar">
+    <div class="left">
+      <img class="logo" src="https://i.postimg.cc/x1z3NG6S/img-removebg-preview.png" alt="Logo">
+      <div class="stack">
+        <div class="hello" id="helloTxt"></div>
+        <div class="cpf" id="cpfTxt"></div>
+      </div>
+    </div>
+    <div class="user-icon" id="userIcon"></div>
+  </div>
+
+  <div class="contact-box">
+    <div class="contact-avatars">
+      <img src="imagens/2.png" alt="Atendente 1">
+      <img src="imagens/3.png" alt="Atendente 2">
+      <img src="imagens/4.png" alt="Atendente 3">
+      <img src="imagens/5.png" alt="Atendente 4">
+      <img src="imagens/1.png" alt="Marca">
+    </div>
+    <div class="contact-title">Dúvidas? fale conosco!</div>
+    <div class="contact-status"><span class="dot"></span> Costuma responder em até <b>2 minutos</b></div>
+  </div>
+
+  <div class="chat-area">
+    <div id="tbWrap"></div>
+    <div id="chatLoading" aria-live="polite" aria-busy="true">
+      <div class="loading-box">
+        <span class="spinner"></span>
+        <p class="loading-text">Iniciando atendimento...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Config =====
+    const TYPEBOT_URL = "https://viewer-production-6387.up.railway.app/typp"; // canônica com "/" final
+    const IFRAME_ID   = "typebotFrame";
+    const SESSION_KEY = "tb_session_stable_v1";
+
+    // ===== Utils =====
+    const params = new URLSearchParams(location.search);
+    const cpfRaw = (params.get('cpf') || '').replace(/\D/g,'');
+
+    // >>> Adição: detectar dispositivo mobile
+    function isMobile(){
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+    }
+
+    function maskTop(cpf){
+      const only = (cpf||'').replace(/\D/g,'');
+      if (only.length < 3) return '';
+      const first = only.slice(0,3);
+      return `${first}.*******`;
+    }
+    function firstName(full=""){
+      const t = String(full).trim();
+      if(!t) return "";
+      return t.split(/\s+/)[0];
+    }
+    async function fetchCliente(cpf){
+      if(!cpf) return null;
+      try{
+        const res = await fetch(`/api/consulta.js?cpf=${encodeURIComponent(cpf)}`, { headers:{'Accept':'application/json'} });
+        const text = await res.text();
+        try { return JSON.parse(text)?.data || null; } catch { return null; }
+      }catch(e){
+        console.warn("Falha na consulta:", e);
+        return null;
+      }
+    }
+    function getStableSession(){
+      try{
+        let s = localStorage.getItem(SESSION_KEY);
+        if (!s) {
+          s = (crypto.randomUUID ? crypto.randomUUID() : ('s_' + Date.now() + '_' + Math.random().toString(36).slice(2)));
+          localStorage.setItem(SESSION_KEY, s);
+        }
+        return s;
+      }catch(e){
+        return 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      }
+    }
+
+    function renderTop(data){
+      const nome = data?.NOME || "";
+      const pn = firstName(nome);
+      const helloEl = document.getElementById('helloTxt');
+      const cpfEl   = document.getElementById('cpfTxt');
+      const iconEl  = document.getElementById('userIcon');
+      if (pn) { helloEl.textContent = `Olá, ${pn}`; iconEl.textContent = pn.charAt(0).toUpperCase(); }
+      if (cpfRaw) cpfEl.textContent = `CPF: ${maskTop(cpfRaw)}`;
+    }
+
+    function mountTypebotOnce() {
+      if (document.getElementById(IFRAME_ID) || window.__TB_MOUNTED__) return;
+      window.__TB_MOUNTED__ = true;
+
+      const wrap = document.getElementById('tbWrap');
+      const session = getStableSession();
+
+      const q = new URLSearchParams();
+      q.set("conversationId", session);
+      if (cpfRaw) q.set("cpf", cpfRaw);
+
+      const finalSrc = q.toString() ? `${TYPEBOT_URL}?${q.toString()}` : TYPEBOT_URL;
+
+      const iframe = document.createElement('iframe');
+      iframe.id = IFRAME_ID;
+      iframe.src = finalSrc;
+      iframe.allow = "clipboard-write *; microphone *; camera *; autoplay *";
+      iframe.setAttribute('loading','eager');
+      iframe.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+
+      // Overlay: some após 2 loads ou 6,2s
+      let loads = 0;
+      const hideOverlay = () => { const o = document.getElementById('chatLoading'); if (o) o.style.display = 'none'; };
+      iframe.addEventListener('load', () => { loads += 1; if (loads >= 1) hideOverlay(); });
+      setTimeout(hideOverlay, 6200);
+
+      wrap.appendChild(iframe);
+    }
+
+    (async () => {
+      try{
+        const dados = await fetchCliente(cpfRaw);
+        renderTop(dados);
+      }catch(e){ /* mantém a página mesmo sem dados */ }
+
+      // >>> Adição: só monta o Typebot se for mobile
+      const hideOverlay = () => { const o = document.getElementById('chatLoading'); if (o) o.style.display = 'none'; };
+
+      if (isMobile()) {
+        if (document.readyState === 'complete') mountTypebotOnce();
+        else window.addEventListener('load', mountTypebotOnce, { once:true });
+      } else {
+        // Desktop: não monta o Typebot e mostra uma nota simples (opcional)
+        hideOverlay();
+        const wrap = document.getElementById('tbWrap');
+        if (wrap) {
+          const note = document.createElement('div');
+          note.className = 'desktop-note';
+          note.innerHTML = 'Este atendimento está indisponível.';
+          wrap.appendChild(note);
+        }
+      }
+    })();
+
+    // Avatares fallback
+    document.querySelectorAll('.contact-avatars img').forEach(img=>{
+      img.addEventListener('error', ()=>{ img.src = 'imagens/1.png'; }, { once:true });
+    });
+  </script>
+
+  <!-- ===== Bloqueio de inspeção ===== -->
+  <script>
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", e => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+      }
+    });
+    setInterval(() => {
+      const start = performance.now();
+      debugger;
+      if (performance.now() - start > 100) {
+        document.body.innerHTML = "";
+      }
+    }, 2000);
+  </script>
+</body>
+</html>
