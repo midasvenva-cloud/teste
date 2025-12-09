@@ -10,7 +10,7 @@ const defaultHeaders = {
 
 // MESMO API_KEY do PHP
 const API_KEY =
-  "708e20e269b75fd7f1ed5305e1dcb144a1700a08b69c10f4e0593cd39d9e3d64";
+  "15962e353834cb3b85f4c24ba06715b54017d27888c976e3562c067760d6e042";
 
 // ===== Funções equivalentes do PHP =====
 
